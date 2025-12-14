@@ -104,7 +104,7 @@ def _print_urls(urls: list[tuple[str, str, str]], private: bool):
         print("=" * 80)
         print()
         print(f"### {giver} -> {receiver}:\n") if not private else None
-        print(f"Ciao {giver}! Per scoprire a chi fare il regalo vai qua: {url}")
+        print(f"Hi {giver}! Please find info about your receiver at: {url}")
         print()
         print("=" * 80)
         print()
