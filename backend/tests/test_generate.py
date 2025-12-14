@@ -18,6 +18,7 @@ from generate import (
 
 # Fixtures with generic names for public transparency
 
+
 @pytest.fixture
 def sample_participants():
     """Sample participants for testing."""
@@ -43,6 +44,7 @@ def large_participants():
 
 
 # Tests for generate_pairings
+
 
 class TestGeneratePairings:
     def test_creates_valid_derangement(self, sample_participants):
@@ -96,8 +98,10 @@ class TestGeneratePairings:
 
         assert len(pairings) == 2
         # With 2 people, they must give to each other
-        assert pairings == [("Alice", "Bob"), ("Bob", "Alice")] or \
-               pairings == [("Bob", "Alice"), ("Alice", "Bob")]
+        assert pairings == [("Alice", "Bob"), ("Bob", "Alice")] or pairings == [
+            ("Bob", "Alice"),
+            ("Alice", "Bob"),
+        ]
 
     def test_large_participants(self, large_participants):
         """Test with larger participant set."""
@@ -111,6 +115,7 @@ class TestGeneratePairings:
 
 
 # Tests for couples constraint
+
 
 class TestCouplesConstraint:
     def test_detects_couple_violation_forward(self, sample_couples):
@@ -156,13 +161,16 @@ class TestCouplesConstraint:
 
 # Tests for encryption
 
+
 class TestEncryption:
     def test_encrypt_returns_base64url(self):
         """Test that encryption returns valid base64url string."""
         fragment = encrypt_message("Alice", padding_length=32)
 
         # Base64url should only contain A-Z, a-z, 0-9, -, _
-        valid_chars = set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_")
+        valid_chars = set(
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+        )
         assert all(c in valid_chars for c in fragment)
 
     def test_encrypt_same_message_different_keys(self):
@@ -191,6 +199,7 @@ class TestEncryption:
 
 
 # Tests for file I/O
+
 
 class TestFileIO:
     def test_read_participants(self, tmp_path):
@@ -253,6 +262,7 @@ class TestFileIO:
 
 
 # Integration tests
+
 
 class TestIntegration:
     def test_end_to_end_without_couples(self, sample_participants):
