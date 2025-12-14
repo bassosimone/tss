@@ -99,8 +99,7 @@ def _print_urls(urls: list[tuple[str, str, str]], private: bool):
     for giver, receiver, url in urls:
         print("=" * 80)
         print()
-        print(f"### {giver} -> {receiver}:") if not private else None
-        print()
+        print(f"### {giver} -> {receiver}:\n") if not private else None
         print(f"Ciao {giver}! Per scoprire a chi fare il regalo vai qua: {url}")
         print()
         print("=" * 80)
@@ -117,7 +116,7 @@ def main():
     )
     parser.add_argument("--padding-length", type=int, default=32)
     parser.add_argument("--max-retries", type=int, default=1000)
-    parser.add_argument("--private", action="store_true", help="Hide receiver names")
+    parser.add_argument("--debug", action="store_true", help="Show receiver names")
 
     args = parser.parse_args()
 
@@ -127,7 +126,7 @@ def main():
     _print_loaded_data(participants, couples, args.padding_length)
     pairings = _must_generate_pairings(participants, couples, args.max_retries)
     urls = _generate_urls(pairings, args.base_url, args.padding_length)
-    _print_urls(urls, args.private)
+    _print_urls(urls, not args.debug)
 
 
 if __name__ == "__main__":
