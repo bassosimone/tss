@@ -1,5 +1,7 @@
 # Trusted Secret Santa (TSS)
 
+[![Build Status](https://github.com/bassosimone/tss/actions/workflows/ci.yml/badge.svg)](https://github.com/bassosimone/tss/actions) [![codecov](https://codecov.io/gh/bassosimone/tss/branch/main/graph/badge.svg)](https://codecov.io/gh/bassosimone/tss)
+
 Privacy-conscious Secret Santa pairing generator
 with client-side decryption.
 
