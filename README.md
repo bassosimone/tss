@@ -49,7 +49,7 @@ Install dependencies (requires Python 3.8+):
 
 ```bash
 cd backend
-uv sync --dev
+uv sync
 ```
 
 ### 2. Prepare participant data
@@ -148,12 +148,26 @@ uv run secretsanta --debug
 uv run secretsanta --help
 ```
 
+### Development Setup
+
+If you want to run tests or contribute to development:
+
+```bash
+cd backend
+
+# Install development dependencies
+uv sync --dev
+
+# Install Playwright browsers (for integration tests)
+uv run playwright install chromium
+```
+
 ### Running tests
 
 ```bash
 cd backend
 
-# Run all tests
+# Run all tests (including integration tests with Playwright)
 uv run pytest
 
 # Run with verbose output
