@@ -40,6 +40,8 @@ def _base64url_fragment_to_message(fragment):
 
 
 class TestMessageToBase64URLFragment:
+    """Tests for message_to_base64url_fragment function."""
+
     def test_result_is_base64url(self):
         """Test that encryption returns valid base64url string."""
         fragment = message_to_base64url_fragment("Alice", padding_length=32)
