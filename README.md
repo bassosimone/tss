@@ -3,6 +3,8 @@
 Privacy-conscious Secret Santa pairing generator
 with client-side decryption.
 
+![All Secret Santas are belong to us!](docs/mascot.png)
+
 ## Overview
 
 TSS generates Secret Santa pairings and delivers them
