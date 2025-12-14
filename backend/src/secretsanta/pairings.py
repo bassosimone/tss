@@ -3,7 +3,11 @@
 import secrets
 
 
-def violates_couples_constraint(pairings, couples):
+def violates_couples_constraint(
+    *,
+    pairings: list[tuple[str, str]],
+    couples: list[tuple[str, str]],
+) -> bool:
     """
     Check if any pairing violates the couples constraint.
 
@@ -18,7 +22,7 @@ def violates_couples_constraint(pairings, couples):
     return False
 
 
-def generate_pairings(participants):
+def generate_pairings(participants: list[str]) -> list[tuple[str, str]]:
     """
     Generate Secret Santa pairings using cyclic derangement.
 

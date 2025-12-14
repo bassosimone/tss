@@ -108,12 +108,18 @@ class TestViolatesCouplesConstraint:
     def test_detects_couple_violation_forward(self, sample_couples):
         """Test detection of A→B when (A,B) are a couple."""
         pairings = [("Alice", "Bob"), ("Bob", "Charlie")]
-        assert violates_couples_constraint(pairings, sample_couples) is True
+        assert (
+            violates_couples_constraint(pairings=pairings, couples=sample_couples)
+            is True
+        )
 
     def test_detects_couple_violation_backward(self, sample_couples):
         """Test detection of B→A when (A,B) are a couple."""
         pairings = [("Bob", "Alice"), ("Alice", "Charlie")]
-        assert violates_couples_constraint(pairings, sample_couples) is True
+        assert (
+            violates_couples_constraint(pairings=pairings, couples=sample_couples)
+            is True
+        )
 
     def test_no_violation_when_couples_separated(self, sample_couples):
         """Test no violation when couples don't give to each other."""
@@ -126,12 +132,15 @@ class TestViolatesCouplesConstraint:
             ("Frank", "Bob"),
             ("George", "Alice"),
         ]
-        assert violates_couples_constraint(pairings, sample_couples) is False
+        assert (
+            violates_couples_constraint(pairings=pairings, couples=sample_couples)
+            is False
+        )
 
     def test_empty_couples_list(self, sample_participants):
         """Test with no couples constraint."""
         pairings = generate_pairings(sample_participants)
-        assert violates_couples_constraint(pairings, []) is False
+        assert violates_couples_constraint(pairings=pairings, couples=[]) is False
 
     def test_multiple_couple_violations(self):
         """Test detection with multiple couple violations."""
@@ -143,4 +152,4 @@ class TestViolatesCouplesConstraint:
             ("Charlie", "Diana"),
             ("Diana", "Charlie"),
         ]
-        assert violates_couples_constraint(pairings, couples) is True
+        assert violates_couples_constraint(pairings=pairings, couples=couples) is True
