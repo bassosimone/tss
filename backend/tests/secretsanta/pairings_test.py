@@ -103,6 +103,14 @@ class TestGeneratePairings:
         assert givers == set(large_participants)
         assert receivers == set(large_participants)
 
+    def test_rejects_too_few_participants(self):
+        """Test that < 2 participants raises ValueError."""
+        with pytest.raises(ValueError, match="Need at least 2 participants"):
+            generate_pairings(["Alice"])
+
+        with pytest.raises(ValueError, match="Need at least 2 participants"):
+            generate_pairings([])
+
 
 class TestViolatesCouplesConstraint:
     """Tests for violates_couples_constraint function."""

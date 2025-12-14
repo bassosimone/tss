@@ -55,6 +55,14 @@ class TestReadCouples:
         couples = read_couples(str(couples_file))
         assert couples == [("Alice", "Bob"), ("Charlie", "Diana")]
 
+    def test_read_couples_ignores_empty_lines(self, tmp_path):
+        """Test that empty lines are ignored."""
+        couples_file = tmp_path / "couples.txt"
+        couples_file.write_text("Alice,Bob\n\nCharlie,Diana\n\n")
+
+        couples = read_couples(str(couples_file))
+        assert couples == [("Alice", "Bob"), ("Charlie", "Diana")]
+
     def test_read_couples_missing_file(self):
         """Test that missing couples file returns empty list."""
         with pytest.raises(FileNotFoundError):

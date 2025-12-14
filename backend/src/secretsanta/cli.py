@@ -70,9 +70,8 @@ def _must_generate_pairings(
             couples=couples,
             max_retries=max_retries,
         )
-        if attempts > 1:
-            print(f"Found valid pairings after {attempts} attempts")
-            print()
+        print(f"Found valid pairings after {attempts} attempts")
+        print()
         return pairings
     except PairingGenerationError as e:
         print(f"Error: {e}")
@@ -133,5 +132,5 @@ def main():
     _print_urls(urls, not args.debug)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
