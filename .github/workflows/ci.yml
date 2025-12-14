@@ -20,40 +20,27 @@ jobs:
           enable-cache: true
 
       - name: Set up Python
+        working-directory: backend
         run: uv python install 3.13
 
       - name: Sync workspace dependencies
+        working-directory: backend
         run: uv sync --dev
 
       - name: Check code formatting with ruff (backend)
         working-directory: backend
-        run: |
-          uv run ruff format --check || {
-            echo "❌ Code formatting check failed!"
-            echo "To fix locally, run: cd backend && uv run ruff format"
-            exit 1
-          }
+        run: uv run ruff format --check
 
       - name: Lint code with ruff (backend)
         working-directory: backend
-        run: |
-          uv run ruff check || {
-            echo "❌ Linting check failed!"
-            echo "To fix locally, run: cd backend && uv run ruff check --fix"
-            exit 1
-          }
+        run: uv run ruff check
 
       - name: Type check with pyright (backend)
         working-directory: backend
-        run: |
-          uv run pyright || {
-            echo "❌ Type checking failed!"
-            echo "To see errors locally, run: cd library && uv run pyright"
-            exit 1
-          }
+        run: uv run pyright
 
-  test-all:
-    name: Test All Components
+  test-pytest:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -64,23 +51,23 @@ jobs:
           enable-cache: true
 
       - name: Set up Python
+        working-directory: backend
         run: uv python install 3.13
 
       - name: Sync workspace dependencies
+        working-directory: backend
         run: uv sync --dev
 
       - name: Install headless chromium
+        working-directory: backend
         run: uv run playwright install chromium
 
       - name: Run pytest
-        run: |
-          uv run pytest --cov=. --cov-report=xml --cov-report=term-missing || {
-            echo "❌ Tests failed!"
-            echo "To run tests locally: uv run pytest"
-            exit 1
-          }
+        working-directory: backend
+        run: uv run pytest --cov=. --cov-report=xml --cov-report=term-missing
 
       - name: Upload coverage reports to Codecov
+        working-directory: backend
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
