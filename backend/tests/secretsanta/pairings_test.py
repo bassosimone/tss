@@ -3,7 +3,9 @@
 import pytest
 
 from secretsanta.pairings import (
+    PairingGenerationError,
     generate_pairings,
+    generate_valid_pairings,
     violates_couples_constraint,
 )
 
@@ -153,3 +155,86 @@ class TestViolatesCouplesConstraint:
             ("Diana", "Charlie"),
         ]
         assert violates_couples_constraint(pairings=pairings, couples=couples) is True
+
+
+class TestGenerateValidPairings:
+    """Tests for generate_valid_pairings function."""
+
+    def test_generates_valid_pairings_without_couples(self, sample_participants):
+        """Test generating valid pairings without couple constraints."""
+        pairings, attempts = generate_valid_pairings(
+            participants=sample_participants,
+            couples=[],
+            max_retries=100,
+        )
+
+        assert len(pairings) == len(sample_participants)
+        assert attempts >= 1
+        # Should succeed on first try with no constraints
+        assert attempts == 1
+
+    def test_generates_valid_pairings_with_couples(
+        self, sample_participants, sample_couples
+    ):
+        """Test generating valid pairings with couple constraints."""
+        pairings, attempts = generate_valid_pairings(
+            participants=sample_participants,
+            couples=sample_couples,
+            max_retries=100,
+        )
+
+        assert len(pairings) == len(sample_participants)
+        assert attempts >= 1
+        # Verify no couples violations
+        assert (
+            violates_couples_constraint(pairings=pairings, couples=sample_couples)
+            is False
+        )
+
+    def test_returns_attempt_count(self, sample_participants, sample_couples):
+        """Test that attempt count is returned correctly."""
+        pairings, attempts = generate_valid_pairings(
+            participants=sample_participants,
+            couples=sample_couples,
+            max_retries=100,
+        )
+
+        assert isinstance(attempts, int)
+        assert attempts >= 1
+        assert attempts <= 100
+
+    def test_raises_on_impossible_constraints(self):
+        """Test that impossible constraints raise PairingGenerationError."""
+        # Only 2 people who are a couple - impossible to satisfy constraint
+        participants = ["Alice", "Bob"]
+        couples = [("Alice", "Bob")]
+
+        with pytest.raises(PairingGenerationError) as exc_info:
+            generate_valid_pairings(
+                participants=participants,
+                couples=couples,
+                max_retries=10,
+            )
+
+        assert "Could not generate valid pairings after 10 attempts" in str(
+            exc_info.value
+        )
+
+    def test_respects_max_retries(self, sample_participants):
+        """Test that max_retries limit is respected."""
+        # Create impossible constraint scenario
+        # Everyone is coupled with everyone else (impossible)
+        impossible_couples = [
+            (sample_participants[i], sample_participants[j])
+            for i in range(len(sample_participants))
+            for j in range(i + 1, len(sample_participants))
+        ]
+
+        with pytest.raises(PairingGenerationError) as exc_info:
+            generate_valid_pairings(
+                participants=sample_participants,
+                couples=impossible_couples,
+                max_retries=5,
+            )
+
+        assert "5 attempts" in str(exc_info.value)

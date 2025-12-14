@@ -3,6 +3,12 @@
 import secrets
 
 
+class PairingGenerationError(Exception):
+    """Raised when cannot generate valid pairings within max retries."""
+
+    pass
+
+
 def violates_couples_constraint(
     *,
     pairings: list[tuple[str, str]],
@@ -43,3 +49,25 @@ def generate_pairings(participants: list[str]) -> list[tuple[str, str]]:
         pairings.append((giver, receiver))
 
     return pairings
+
+
+def generate_valid_pairings(
+    *,
+    participants: list[str],
+    couples: list[tuple[str, str]],
+    max_retries: int,
+) -> tuple[list[tuple[str, str]], int]:
+    """
+    Generate pairings that respect couples constraints.
+
+    Returns (pairings, attempts) on success.
+    Raises PairingGenerationError on failure.
+    """
+    for attempt in range(max_retries):
+        candidates = generate_pairings(participants)
+        if not violates_couples_constraint(pairings=candidates, couples=couples):
+            return (candidates, attempt + 1)
+
+    raise PairingGenerationError(
+        f"Could not generate valid pairings after {max_retries} attempts"
+    )

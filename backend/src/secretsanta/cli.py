@@ -5,7 +5,7 @@ import sys
 
 from secretsanta.crypto import message_to_base64url_fragment
 from secretsanta.readers import read_couples, read_participants
-from secretsanta.pairings import generate_pairings, violates_couples_constraint
+from secretsanta.pairings import PairingGenerationError, generate_valid_pairings
 
 
 def _must_read_participants(filepath) -> list[str]:
@@ -62,18 +62,22 @@ def _must_generate_pairings(
     participants: list[str],
     couples: list[tuple[str, str]],
     max_retries: int,
-):
+) -> list[tuple[str, str]]:
     """Generate the pairings with constraints or exit."""
-    for attempt in range(max_retries):
-        candidates = generate_pairings(participants)
-        if not violates_couples_constraint(pairings=candidates, couples=couples):
-            print(f"Found valid pairings after {attempt + 1} attempts")
+    try:
+        pairings, attempts = generate_valid_pairings(
+            participants=participants,
+            couples=couples,
+            max_retries=max_retries,
+        )
+        if attempts > 1:
+            print(f"Found valid pairings after {attempts} attempts")
             print()
-            return candidates
-
-    print(f"Error: Could not generate valid pairings after {max_retries} attempts")
-    print("Try again or check your constraints")
-    sys.exit(1)
+        return pairings
+    except PairingGenerationError as e:
+        print(f"Error: {e}")
+        print("Try again or check your constraints")
+        sys.exit(1)
 
 
 def _generate_urls(
