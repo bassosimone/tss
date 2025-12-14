@@ -105,7 +105,7 @@ etc. They click it to see their assignment.
 The frontend is a static HTML page hosted on GitHub Pages
 using the following URL by default:
 
-**URL**: `https://bassosimone.github.io/secret-santa/`
+**URL**: https://bassosimone.github.io/secret-santa/
 
 To deploy updates:
 
