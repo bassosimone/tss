@@ -316,7 +316,11 @@ This is a personal project for a specific use case, but you're welcome to:
 
 ## License
 
-See [LICENSE](LICENSE) file.
+```
+SPDX-License-Identified: MIT
+```
+
+See the [LICENSE](LICENSE) file.
 
 ## See Also
 
